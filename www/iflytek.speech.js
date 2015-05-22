@@ -2,7 +2,7 @@ var cordova = require('cordova');
 var channel = require('cordova/channel');
 var exec = require('cordova/exec');
 
-var iflytekSpeech = function (appId) {
+var iflytekSpeech = function () {
     this.channels = {
         'EvaluatorResults': channel.create('EvaluatorResults'),
         'SpeechResults': channel.create('SpeechResults'),
@@ -34,7 +34,6 @@ var iflytekSpeech = function (appId) {
             'vimary': 'female',
         }
     };
-    this.initialize(appId);
     this.text = '';
 };
 
@@ -147,4 +146,4 @@ iflytekSpeech.prototype = {
     }
 };
 
-module.exports = iflytekSpeech;
+module.exports = iflytekSpeech();
