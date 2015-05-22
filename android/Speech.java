@@ -128,7 +128,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         return evaluator;
     }
 
-    private void initialize(appId, CallbackContext callbackContext) {
+    private void initialize(String appId, CallbackContext callbackContext) {
         this.callback = callbackContext;
         SpeechUtility.createUtility(cordova.getActivity(), appId +"=" + SPEECH_APP_ID);
     }
