@@ -126,7 +126,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
     private void initialize(String appId, CallbackContext callbackContext) {
         this.callback = callbackContext;
-        SpeechUtility.createUtility(cordova.getActivity(), SpeechConstant.APPID + "=" + appId);
+        SpeechUtility.createUtility(cordova.getActivity(), SpeechConstant.APPID + "=" + appId + "," + SpeechConstant.FORCE_LOGIN + "=true");
     }
 
     private void startListening(JSONObject options, CallbackContext callbackContext) {
@@ -135,7 +135,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         rec.setParameter(SpeechConstant.DOMAIN, "iat");
         rec.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         rec.setParameter(SpeechConstant.ACCENT, "mandarin");
-        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
+        //rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
 
         if (options != null) {
             Iterator it = options.keys();
@@ -163,8 +163,8 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         sp.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
         sp.setParameter(SpeechConstant.SPEED, "50");
         sp.setParameter(SpeechConstant.VOLUME, "80");
-        sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
+        //sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+        //sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
 
         if (options != null) {
             Iterator it = options.keys();
@@ -172,7 +172,6 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
                 String key = (String) it.next();
                 String value = options.optString(key);
                 sp.setParameter(key, value);
-                //Log.w(LOGTAG, String.format("param: %s = %s", key, value));
             }
         }
 
@@ -239,7 +238,6 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -253,7 +251,6 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -269,7 +266,6 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -302,13 +298,11 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     @Override
     public void onBeginOfSpeech() {
         fireEvent(EVENT_SPEECH_BEGIN);
-
     }
 
     @Override
     public void onEndOfSpeech() {
         fireEvent(EVENT_SPEECH_END);
-
     }
 
     @Override
@@ -324,13 +318,6 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-        Log.d(this.getClass().getName(), "onEvent " + eventType + " " + arg1 + " " + arg2 + " " + obj);
-        // fireEvent(EVENT_SPEECH_ERROR);
     }
 
     @Override
@@ -369,5 +356,9 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {        
     }
 }
