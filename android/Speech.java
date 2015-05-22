@@ -1,6 +1,19 @@
 package hkicon.cordova.plugin.iflytek;
 
-import java.util.Iterator;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.iflytek.cloud.EvaluatorListener;
+import com.iflytek.cloud.EvaluatorResult;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechEvaluator;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.SynthesizerListener;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -8,30 +21,13 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.LexiconListener;
-import com.iflytek.cloud.RecognizerListener;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
-import com.iflytek.cloud.SpeechSynthesizer;
-import com.iflytek.cloud.SpeechUtility;
-import com.iflytek.cloud.SynthesizerListener;
-import com.iflytek.cloud.util.ContactManager;
-import com.iflytek.cloud.util.ContactManager.ContactListener;
+import java.util.Iterator;
 
 /**
  * This class echoes a string called from JavaScript.
  */
 public class Speech extends CordovaPlugin implements RecognizerListener, SynthesizerListener, EvaluatorListener {
-	private static final String LOGTAG = "SpeechPlugin";
-
     public static final String STR_EVENT = "event";
     public static final String STR_CODE = "code";
     public static final String STR_MESSAGE = "message";
@@ -41,7 +37,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
     public static final String EVENT_EVALUATOR_RESULTS = "EvaluatorResults";
     public static final String EVENT_SPEECH_RESULTS = "SpeechResults";
-    
+
     public static final String EVENT_SPEECH_ERROR = "SpeechError";
     public static final String EVENT_VOLUME_CHANGED = "VolumeChanged";
     public static final String EVENT_SPEECH_BEGIN = "SpeechBegin";
@@ -55,8 +51,8 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     public static final String EVENT_SPEAK_CANCEL = "SpeakCancel";
     public static final String EVENT_SPEAK_PROGRESS = "SpeakProgress";
     public static final String EVENT_BUFFER_PROGRESS = "BufferProgress";
-        
-    
+
+
     private CallbackContext callback;
     private SpeechRecognizer recognizer;
     private SpeechSynthesizer synthesizer;
@@ -67,39 +63,39 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         if (action.equals("initialize")) {
             String appId = args.getString(0);
             this.initialize(appId, callbackContext);
-            
+
         } else if (action.equals("startListening")) {
             JSONObject options = args.optJSONObject(0);
             this.startListening(options, callbackContext);
-            
+
         } else if (action.equals("stopListening")) {
             this.stopListening(callbackContext);
-            
+
         } else if (action.equals("cancelListening")) {
             this.cancelListening(callbackContext);
-            
+
         } else if (action.equals("startSpeaking")) {
             String text = args.getString(0);
             JSONObject options = args.optJSONObject(1);
             this.startSpeaking(text, options, callbackContext);
-            
+
         } else if (action.equals("pauseSpeaking")) {
             this.pauseSpeaking(callbackContext);
-            
+
         } else if (action.equals("resumeSpeaking")) {
             this.resumeSpeaking(callbackContext);
-            
+
         } else if (action.equals("stopSpeaking")) {
             this.stopSpeaking(callbackContext);
-            
-        }  else if (action.equals("startEvaluating")) {
+
+        } else if (action.equals("startEvaluating")) {
             String text = args.getString(0);
             JSONObject options = args.optJSONObject(1);
-            this.startEvaluating(text, options,callbackContext);
-            
+            this.startEvaluating(text, options, callbackContext);
+
         } else if (action.equals("stopEvaluating")) {
             this.stopEvaluating(callbackContext);
-            
+
         } else { // Unrecognized action.
             return false;
         }
@@ -120,7 +116,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         }
         return synthesizer;
     }
-    
+
     private SpeechEvaluator getEvaluator() {
         if (evaluator == null) {
             evaluator = SpeechEvaluator.createEvaluator(this.cordova.getActivity(), null);
@@ -130,19 +126,19 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
     private void initialize(String appId, CallbackContext callbackContext) {
         this.callback = callbackContext;
-        SpeechUtility.createUtility(cordova.getActivity(), appId +"=" + SPEECH_APP_ID);
+        SpeechUtility.createUtility(cordova.getActivity(), SpeechConstant.APPID + "=" + appId);
     }
 
     private void startListening(JSONObject options, CallbackContext callbackContext) {
-    	SpeechRecognizer rec = getRecognizer();
-    	
+        SpeechRecognizer rec = getRecognizer();
+
         rec.setParameter(SpeechConstant.DOMAIN, "iat");
         rec.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         rec.setParameter(SpeechConstant.ACCENT, "mandarin");
-        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH,"./sdcard/iflytek.asr.pcm");
+        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
 
         if (options != null) {
-        	Iterator it = options.keys();
+            Iterator it = options.keys();
             while (it.hasNext()) {
                 String key = (String) it.next();
                 String value = options.optString(key);
@@ -162,16 +158,16 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     }
 
     private void startSpeaking(String text, JSONObject options, CallbackContext callbackContext) {
-    	SpeechSynthesizer sp = getSynthesizer();
-    	
+        SpeechSynthesizer sp = getSynthesizer();
+
         sp.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
         sp.setParameter(SpeechConstant.SPEED, "50");
         sp.setParameter(SpeechConstant.VOLUME, "80");
         sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH,"./sdcard/iflytek.tts.pcm");
+        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
 
         if (options != null) {
-        	Iterator it = options.keys();
+            Iterator it = options.keys();
             while (it.hasNext()) {
                 String key = (String) it.next();
                 String value = options.optString(key);
@@ -195,9 +191,9 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         getSynthesizer().stopSpeaking();
     }
 
-    private void startEvaluating(string text, JSONObject options, CallbackContext callbackContext){
+    private void startEvaluating(String text, JSONObject options, CallbackContext callbackContext) {
         SpeechEvaluator evaluator = getEvaluator();
-    	
+
         evaluator.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         evaluator.setParameter(SpeechConstant.ISE_CATEGORY, "read_word");
         evaluator.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
@@ -205,7 +201,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         evaluator.setParameter(SpeechConstant.RESULT_LEVEL, "complete");
 
         if (options != null) {
-        	Iterator it = options.keys();
+            Iterator it = options.keys();
             while (it.hasNext()) {
                 String key = (String) it.next();
                 String value = options.optString(key);
@@ -215,11 +211,11 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
         evaluator.startEvaluating(text, null, this);
     }
-    
-    private void stopEvaluating(CallbackContext callbackContext){
+
+    private void stopEvaluating(CallbackContext callbackContext) {
         getEvaluator().stopEvaluating();
-    }    
-    
+    }
+
     private void sendUpdate(JSONObject obj, boolean keepCallback, PluginResult.Status status) {
         if (callback != null) {
             PluginResult result = new PluginResult(status, obj);
@@ -332,8 +328,8 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     }
 
     @Override
-    public void onEvent(int eventType, int arg1, int arg2, String msg) {
-        Log.d(this.getClass().getName(), "onEvent " + eventType + " " + arg1 + " " + arg2 + " " + msg);
+    public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
+        Log.d(this.getClass().getName(), "onEvent " + eventType + " " + arg1 + " " + arg2 + " " + obj);
         // fireEvent(EVENT_SPEECH_ERROR);
     }
 
@@ -361,7 +357,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public void onResult(EvaluatorResult result, boolean isLast) {
         JSONObject obj = new JSONObject();
