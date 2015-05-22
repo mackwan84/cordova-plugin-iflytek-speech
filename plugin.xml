@@ -13,7 +13,7 @@
     </engines>
 
     <js-module src="www/iflytek.speech.js" name="iflytekSpeech">
-        <clobbers target="window.iflytekSpeech" />
+        <clobbers target="navigator.speech" />
     </js-module>
 
     <platform name="android">
