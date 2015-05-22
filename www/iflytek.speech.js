@@ -64,7 +64,7 @@ iflytekSpeech.prototype = {
         var callback = function (info) {
             speech._eventHandler(info);
         };
-        exec(callback, callback, 'Speech', 'initialize', [appId]);
+        exec(callback, function(err) { alert(err); }, 'Speech', 'initialize', [appId]);
 
         function parseSpeechResults(e) {
             var data = JSON.parse(e.results);
@@ -109,40 +109,40 @@ iflytekSpeech.prototype = {
 
     startListening: function (options, speakCallback) {
         this.onSpeakCallback = speakCallback;
-        exec(null, null, 'Speech', 'startListening', [options]);
+        exec(null, function(err) { alert(err); }, 'Speech', 'startListening', [options]);
     },
 
     stopListening: function () {
-        exec(null, null, 'Speech', 'stopListening', []);
+        exec(null, function(err) { alert(err); }, 'Speech', 'stopListening', []);
     },
 
     cancelListening: function () {
-        exec(null, null, 'Speech', 'cancelListening', []);
+        exec(null, function(err) { alert(err); }, 'Speech', 'cancelListening', []);
     },
 
     startSpeaking: function (text, options) {
-        exec(null, null, 'Speech', 'startSpeaking', [text, options]);
+        exec(null, function(err) { alert(err); }, 'Speech', 'startSpeaking', [text, options]);
     },
 
     pauseSpeaking: function () {
-        exec(null, null, 'Speech', 'pauseSpeaking', []);
+        exec(null, function(err) { alert(err); }, 'Speech', 'pauseSpeaking', []);
     },
 
     resumeSpeaking: function () {
-        exec(null, null, 'Speech', 'resumeSpeaking', []);
+        exec(null, function(err) { alert(err); }, 'Speech', 'resumeSpeaking', []);
     },
 
     stopSpeaking: function () {
-        exec(null, null, 'Speech', 'stopSpeaking', []);
+        exec(null, function(err) { alert(err); }, 'Speech', 'stopSpeaking', []);
     },
 
     startEvaluating: function (text, options, evaluateCallback) {
         this.onEvaluateCallback = evaluateCallback;
-        exec(null, null, 'Speech', 'startEvaluating', [text, options]);
+        exec(null, function(err) { alert(err); }, 'Speech', 'startEvaluating', [text, options]);
     },
 
     stopEvaluating: function () {
-        exec(null, null, 'Speech', 'stopEvaluating', []);
+        exec(null, function(err) { alert(err); }, 'Speech', 'stopEvaluating', []);
     }
 };
 
