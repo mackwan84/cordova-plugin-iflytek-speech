@@ -146,4 +146,4 @@ iflytekSpeech.prototype = {
     }
 };
 
-module.exports = iflytekSpeech();
+module.exports = new iflytekSpeech();
