@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<plugin id="hkicon.cordova.plugin.iflytek.speech" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>iflytek.Speech</name>
+    <description>Cordova plugin to support speech related functions with iFlyTek voice cloud service (讯飞语音云)</description>
+    <author>Mac Kwan</author>
+    <license>The MIT License (MIT)</license>
+    <keywords>cordova,speech,recognizer,synthesizer,iflytek</keywords>
+    <repo>https://github.com/mackwan84/cordova-plugin-iflytek-speech.git</repo>
+    <issue>https://github.com/mackwan84/cordova-plugin-iflytek-speech/issues</issue>
+
+    <engines>
+        <engine name="cordova" version=">=4.0.0" />
+    </engines>
+
+    <js-module src="www/iflytek.speech.js" name="iflytekSpeech">
+        <clobbers target="iflytekSpeech" />
+    </js-module>
+
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="Speech">
+                <param name="android-package" value="hkicon.cordova.plugin.iflytek.Speech" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        </config-file>
+
+        <source-file src="android/Speech.java" target-dir="src/hkicon/cordova/plugin/iflytek" />
+        <source-file src="android/libs/armeabi/libmsc.so" target-dir="libs/armeabi" />
+        <source-file src="android/libs/Msc.jar" target-dir="libs" />
+        <source-file src="android/libs/Sunflower.jar" target-dir="libs" />
+    </platform>
+</plugin>
