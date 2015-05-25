@@ -1,5 +1,6 @@
 package hkicon.cordova.plugin.iflytek;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -164,6 +165,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         sp.setParameter(SpeechConstant.SPEED, "50");
         sp.setParameter(SpeechConstant.VOLUME, "80");
         sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+        sp.setParameter(SpeechConstant.STREAM_TYPE, AudioManager.STREAM_MUSIC);
         sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
 
         if (options != null) {
