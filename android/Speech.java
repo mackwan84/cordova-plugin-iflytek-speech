@@ -135,7 +135,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         rec.setParameter(SpeechConstant.DOMAIN, "iat");
         rec.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         rec.setParameter(SpeechConstant.ACCENT, "mandarin");
-        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
+        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.amr");
 
         if (options != null) {
             Iterator it = options.keys();
@@ -164,7 +164,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         sp.setParameter(SpeechConstant.SPEED, "50");
         sp.setParameter(SpeechConstant.VOLUME, "80");
         sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
+        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.amr");
 
         if (options != null) {
             Iterator it = options.keys();
@@ -191,24 +191,25 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     }
 
     private void startEvaluating(String text, JSONObject options, CallbackContext callbackContext) {
-        SpeechEvaluator evaluator = getEvaluator();
+        SpeechEvaluator ise = getEvaluator();
 
-        evaluator.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
-        evaluator.setParameter(SpeechConstant.ISE_CATEGORY, "read_word");
-        evaluator.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
-        evaluator.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT, "-1");
-        evaluator.setParameter(SpeechConstant.RESULT_LEVEL, "complete");
+        ise.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        ise.setParameter(SpeechConstant.ISE_CATEGORY, "read_word");
+        ise.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
+        ise.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT, "-1");
+        ise.setParameter(SpeechConstant.RESULT_LEVEL, "complete");
+        ise.setParameter(SpeechConstant.ISE_AUDIO_PATH, "./sdcard/iflytek.ise.amr");
 
         if (options != null) {
             Iterator it = options.keys();
             while (it.hasNext()) {
                 String key = (String) it.next();
                 String value = options.optString(key);
-                evaluator.setParameter(key, value);
+                ise.setParameter(key, value);
             }
         }
 
-        evaluator.startEvaluating(text, null, this);
+        ise.startEvaluating(text, null, this);
     }
 
     private void stopEvaluating(CallbackContext callbackContext) {
