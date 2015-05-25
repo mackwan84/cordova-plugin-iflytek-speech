@@ -268,7 +268,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 				WavWriter writer = new WavWriter(file, 16000);
 				writer.writeHeader();
 				writer.close();
-			} catch {
+			} catch (IOException e) {
 			}
 		}
 	
@@ -338,14 +338,14 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     }
 
     @Override
-    public void onResult(RecognizerResult result, boolean islast) {
+    public void onResult(RecognizerResult result, boolean isLast) {
 		if(isLast) {
 			try {
 				File file = new File(ASR_FILE);
 				WavWriter writer = new WavWriter(file, 16000);
 				writer.writeHeader();
 				writer.close();
-			} catch {
+			} catch (IOException e) {
 			}
 		}
 	
@@ -380,7 +380,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 				WavWriter writer = new WavWriter(file, 16000);
 				writer.writeHeader();
 				writer.close();
-			} catch {
+			} catch (IOException e) {
 			}
 		}
 	
