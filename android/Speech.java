@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -51,6 +53,10 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     public static final String EVENT_SPEAK_CANCEL = "SpeakCancel";
     public static final String EVENT_SPEAK_PROGRESS = "SpeakProgress";
     public static final String EVENT_BUFFER_PROGRESS = "BufferProgress";
+	
+    public static final String ASR_FILE = "./sdcard/iflytek.asr.wav";
+    public static final String ISE_FILE = "./sdcard/iflytek.ise.wav";
+    public static final String TTS_FILE = "./sdcard/iflytek.tts.wav";
 
 
     private CallbackContext callback;
@@ -135,7 +141,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         rec.setParameter(SpeechConstant.DOMAIN, "iat");
         rec.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         rec.setParameter(SpeechConstant.ACCENT, "mandarin");
-        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
+        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, ASR_FILE);
 
         if (options != null) {
             Iterator it = options.keys();
@@ -164,7 +170,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         sp.setParameter(SpeechConstant.SPEED, "50");
         sp.setParameter(SpeechConstant.VOLUME, "80");
         sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
+        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, TTS_FILE);
 
         if (options != null) {
             Iterator it = options.keys();
@@ -198,7 +204,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         ise.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
         ise.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT, "-1");
         ise.setParameter(SpeechConstant.RESULT_LEVEL, "complete");
-        ise.setParameter(SpeechConstant.ISE_AUDIO_PATH, "./sdcard/iflytek.ise.pcm");
+        ise.setParameter(SpeechConstant.ISE_AUDIO_PATH, ISE_FILE);
 
         if (options != null) {
             Iterator it = options.keys();
@@ -256,6 +262,16 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
     @Override
     public void onCompleted(SpeechError error) {
+		if(error == null) {			
+			try {
+				File file = new File(TTS_FILE);
+				WavWriter writer = new WavWriter(file, 16000);
+				writer.writeHeader();
+				writer.close();
+			} catch {
+			}
+		}
+	
         JSONObject obj = new JSONObject();
         try {
             obj.put(STR_EVENT, EVENT_SPEAK_COMPLETED);
@@ -323,6 +339,16 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
     @Override
     public void onResult(RecognizerResult result, boolean islast) {
+		if(isLast) {
+			try {
+				File file = new File(ASR_FILE);
+				WavWriter writer = new WavWriter(file, 16000);
+				writer.writeHeader();
+				writer.close();
+			} catch {
+			}
+		}
+	
         JSONObject obj = new JSONObject();
         try {
             obj.put(STR_EVENT, EVENT_SPEECH_RESULTS);
@@ -348,6 +374,16 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
 
     @Override
     public void onResult(EvaluatorResult result, boolean isLast) {
+		if(isLast) {
+			try {
+				File file = new File(ISE_FILE);
+				WavWriter writer = new WavWriter(file, 16000);
+				writer.writeHeader();
+				writer.close();
+			} catch {
+			}
+		}
+	
         JSONObject obj = new JSONObject();
         try {
             obj.put(STR_EVENT, EVENT_EVALUATOR_RESULTS);

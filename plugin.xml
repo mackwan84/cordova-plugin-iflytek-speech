@@ -34,6 +34,7 @@
         </config-file>
 
         <source-file src="android/Speech.java" target-dir="src/hkicon/cordova/plugin/iflytek" />
+        <source-file src="android/WavWriter.java" target-dir="src/hkicon/cordova/plugin/iflytek" />
         <source-file src="android/libs/armeabi/libmsc.so" target-dir="libs/armeabi" />
         <source-file src="android/libs/Msc.jar" target-dir="libs" />
         <source-file src="android/libs/Sunflower.jar" target-dir="libs" />
