@@ -135,7 +135,7 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         rec.setParameter(SpeechConstant.DOMAIN, "iat");
         rec.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         rec.setParameter(SpeechConstant.ACCENT, "mandarin");
-        //rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
+        rec.setParameter(SpeechConstant.ASR_AUDIO_PATH, "./sdcard/iflytek.asr.pcm");
 
         if (options != null) {
             Iterator it = options.keys();
@@ -163,8 +163,8 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
         sp.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
         sp.setParameter(SpeechConstant.SPEED, "50");
         sp.setParameter(SpeechConstant.VOLUME, "80");
-        //sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-        //sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
+        sp.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+        sp.setParameter(SpeechConstant.TTS_AUDIO_PATH, "./sdcard/iflytek.tts.pcm");
 
         if (options != null) {
             Iterator it = options.keys();
